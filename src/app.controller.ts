@@ -8,16 +8,34 @@ import {
   Delete,
 } from '@nestjs/common';
 
-import { User as UserModel, Post as PostModel } from '@prisma/client';
+import { User as UserModel, Post as PostModel, Comment } from '@prisma/client';
 import { UserService } from './user/user.service';
 import { PostService } from './post/post.service';
+import { CommentService } from './comment/comment.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly userService: UserService,
     private readonly postService: PostService,
+    private readonly commentService: CommentService,
   ) { }
+
+  @Get('comment')
+  async getAllComments(): Promise<Comment[]> {
+    return this.commentService.getAll();
+  }
+
+  @Post('comment')
+  async createComment(@Body() commentData: Comment): Promise<Comment> {
+    return this.commentService.create(commentData);
+  }
+
+  @Get('comment/:id')
+  async getCommentById(@Param('id') id: string): Promise<Comment> {
+    return this.commentService.findById({ id: Number(id) });
+  }
+
 
   @Get('post/:id')
   async getPostById(@Param('id') id: string): Promise<PostModel> {
@@ -41,9 +59,9 @@ export class AppController {
           {
             title: { contains: searchString },
           },
-          {
-            content: { contains: searchString },
-          },
+          // {
+          //   content: { contains: searchString },
+          // },
         ],
       },
     });
@@ -51,14 +69,14 @@ export class AppController {
 
   @Post('post')
   async createDraft(
-    @Body() postData: { title: string; content?: string; authorEmail: string },
+    @Body() postData: { title: string; content?: string; authorId: number },
   ): Promise<PostModel> {
-    const { title, content, authorEmail } = postData;
+    const { title, content, authorId } = postData;
     return this.postService.createPost({
       title,
       content,
       author: {
-        connect: { email: authorEmail },
+        connect: { id: authorId },
       },
     });
   }
