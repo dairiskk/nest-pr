@@ -16,21 +16,28 @@ describe('Post (e2e)', () => {
   });
 
   it('can publish', async () => {
-    await request("localhost:3000")
-      .put('/publish/2').send()
+    await request("localhost:3000/post/publish/2")
+      .put("").send()
       .expect(200)
 
-    let res = await request("localhost:3000")
-      .get('/feed').send()
+    let res = await request("localhost:3000/post/feed")
+      .get('').send()
 
+    expect(res.status).toBe(200)
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBeGreaterThanOrEqual(1)
+  });
+  it('can filter by title', async () => {
+    let res = await request("localhost:3000/post")
+      .get('/filtered-posts/test title').send()
+      .expect(200)
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);
     expect(res.body.length).toBeGreaterThan(1)
   });
-
-  it('can filter by title', async () => {
-    let res = await request("localhost:3000")
-      .get('/filtered-posts/test title').send()
+  it('can filter by user id', async () => {
+    let res = await request("localhost:3000/post/user/1")
+      .get("").send()
       .expect(200)
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);
