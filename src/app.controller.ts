@@ -9,14 +9,12 @@ import {
 } from '@nestjs/common';
 
 import { User as UserModel, Post as PostModel, Comment } from '@prisma/client';
-import { UserService } from './user/user.service';
 import { PostService } from './post/post.service';
 import { CommentService } from './comment/comment.service';
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly userService: UserService,
     private readonly postService: PostService,
     private readonly commentService: CommentService,
   ) { }
@@ -79,13 +77,6 @@ export class AppController {
         connect: { id: authorId },
       },
     });
-  }
-
-  @Post('user')
-  async signupUser(
-    @Body() userData: { name?: string; email: string },
-  ): Promise<UserModel> {
-    return this.userService.createUser(userData);
   }
 
   @Put('publish/:id')
