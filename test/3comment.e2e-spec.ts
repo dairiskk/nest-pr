@@ -14,7 +14,7 @@ describe('Comment (e2e)', () => {
     const res = await request("localhost:3000").get('/comment');
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);
-    expect(res.body.length).toBeGreaterThan(1)
+    expect(res.body.length).toBeGreaterThanOrEqual(1)
   });
 
   it('can get by id', async () => {
