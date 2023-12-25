@@ -5,7 +5,7 @@ import * as crypto from 'crypto'
 
 describe('Post (e2e)', () => {
   it('can create post', async () => {
-    await request("localhost:3000")
+    await request("localhost:3001")
       .post('/post').send
       ({
         "title": "test title",
@@ -16,11 +16,11 @@ describe('Post (e2e)', () => {
   });
 
   it('can publish', async () => {
-    await request("localhost:3000/post/publish/2")
+    await request("localhost:3001/post/publish/2")
       .put("").send()
       .expect(200)
 
-    let res = await request("localhost:3000/post/feed")
+    let res = await request("localhost:3001/post/feed")
       .get('').send()
 
     expect(res.status).toBe(200)
@@ -28,7 +28,7 @@ describe('Post (e2e)', () => {
     expect(res.body.length).toBeGreaterThanOrEqual(1)
   });
   it('can filter by title', async () => {
-    let res = await request("localhost:3000/post")
+    let res = await request("localhost:3001/post")
       .get('/filtered-posts/test title').send()
       .expect(200)
     expect(res.status).toBe(200)
@@ -36,7 +36,7 @@ describe('Post (e2e)', () => {
     expect(res.body.length).toBeGreaterThan(1)
   });
   it('can filter by user id', async () => {
-    let res = await request("localhost:3000/post/user/1")
+    let res = await request("localhost:3001/post/user/1")
       .get("").send()
       .expect(200)
     expect(res.status).toBe(200)
