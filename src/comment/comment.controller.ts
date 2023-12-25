@@ -23,4 +23,8 @@ export class CommentController {
     async getCommentById(@Param('id') id: string): Promise<Comment> {
         return this.commentService.findById({ id: Number(id) });
     }
+    @Get('user/:id')
+    async getUserId(@Param('id') id: string): Promise<Comment[] | null> {
+        return this.commentService.comments({ where: { authorId: Number(id) } });
+    }
 }

@@ -24,4 +24,13 @@ describe('Comment (e2e)', () => {
     expect(res.status).toBe(200)
     expect(res.body.id).toBeDefined()
   });
+
+  it('can filter by user id', async () => {
+    let res = await request("localhost:3000/comment/user/1")
+      .get("").send()
+      .expect(200)
+    expect(res.status).toBe(200)
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBeGreaterThan(1)
+  });
 });

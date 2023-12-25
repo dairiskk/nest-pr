@@ -23,4 +23,21 @@ export class CommentService {
             where,
         });
     }
+
+    async comments(params: {
+        skip?: number;
+        take?: number;
+        cursor?: Prisma.CommentWhereUniqueInput;
+        where?: Prisma.CommentWhereInput;
+        orderBy?: Prisma.CommentOrderByWithRelationInput;
+    }): Promise<Comment[] | null> {
+        const { skip, take, cursor, where, orderBy } = params;
+        return this.prisma.comment.findMany({
+            skip,
+            take,
+            cursor,
+            where,
+            orderBy,
+        });
+    }
 }
