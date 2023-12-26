@@ -6,9 +6,10 @@ import { UserController } from 'src/user/user.controller';
 import { UserService } from 'src/user/user.service';
 import { EncryptionService } from 'src/encription.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-    imports: [
+    imports: [UserModule,
         JwtModule.register({
             global: true,
             secret: jwtConstants.secret,
@@ -16,7 +17,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
         }),
     ],
     providers: [AuthService, UserService, EncryptionService, PrismaService],
-    controllers: [UserController],
+    controllers: [],
     exports: [AuthService],
 })
 export class AuthModule { }

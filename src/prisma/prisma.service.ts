@@ -6,7 +6,7 @@ import { UserService } from '../user/user.service';
 export class PrismaService extends PrismaClient implements OnModuleInit {
 
     constructor(
-        // private readonly usersService: UserService
+        //  private readonly usersService: UserService
     ) {
         super();
 
