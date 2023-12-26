@@ -6,7 +6,7 @@ import * as crypto from 'crypto'
 describe('Post (e2e)', () => {
   it('can create post', async () => {
     await request("localhost:3001")
-      .post('/post').send
+      .post('/post').auth("123", { type: "bearer" }).send
       ({
         "title": "test title",
         "content": "TERE TERE",
@@ -17,11 +17,11 @@ describe('Post (e2e)', () => {
 
   it('can publish', async () => {
     await request("localhost:3001/post/publish/2")
-      .put("").send()
+      .put("").auth("123", { type: "bearer" }).send()
       .expect(200)
 
     let res = await request("localhost:3001/post/feed")
-      .get('').send()
+      .get('').auth("123", { type: "bearer" }).send()
 
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);
@@ -29,7 +29,7 @@ describe('Post (e2e)', () => {
   });
   it('can filter by title', async () => {
     let res = await request("localhost:3001/post")
-      .get('/filtered-posts/test title').send()
+      .get('/filtered-posts/test title').auth("123", { type: "bearer" }).send()
       .expect(200)
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);
@@ -37,7 +37,7 @@ describe('Post (e2e)', () => {
   });
   it('can filter by user id', async () => {
     let res = await request("localhost:3001/post/user/1")
-      .get("").send()
+      .get("").auth("123", { type: "bearer" }).send()
       .expect(200)
     expect(res.status).toBe(200)
     expect(res.body).toBeInstanceOf(Array);

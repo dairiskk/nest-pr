@@ -5,7 +5,7 @@ import { jwtConstants } from './constants';
 import { UserController } from 'src/user/user.controller';
 import { UserService } from 'src/user/user.service';
 import { EncryptionService } from 'src/encription.service';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
     imports: [
