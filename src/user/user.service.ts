@@ -1,17 +1,22 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import * as bcrypt from 'bcrypt';
+import { EncryptionService } from 'src/encription.service';
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private encriptionService: EncryptionService) { }
 
     async user(
-        userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+        params: { email: string, password: string }
     ): Promise<User | null> {
-        return this.prisma.user.findUnique({
-            where: userWhereUniqueInput,
+        let found = await this.prisma.user.findUnique({
+            where: { email: params.email }
         });
+        if (found && await this.encriptionService.comparePasswords(params.password, found.password)) {
+            return found;
+        } else { throw new UnauthorizedException }
     }
 
     async users(params: {
@@ -42,28 +47,11 @@ export class UserService {
         }
         return this.prisma.user.create({
             data: {
-                name: data.name,
                 email: data.email,
+                password: (await this.encriptionService.hashPassword(data.password)).toString(),
                 createdAt: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
                 updatedAt: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
             }
         })
-    }
-
-    async updateUser(params: {
-        where: Prisma.UserWhereUniqueInput;
-        data: Prisma.UserUpdateInput;
-    }): Promise<User> {
-        const { where, data } = params;
-        return this.prisma.user.update({
-            data,
-            where,
-        });
-    }
-
-    async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-        return this.prisma.user.delete({
-            where,
-        });
     }
 }
