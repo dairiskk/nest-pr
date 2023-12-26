@@ -2,11 +2,12 @@ import { Body, Controller, Get, Post, HttpCode, HttpStatus } from '@nestjs/commo
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from 'src/auth/auth.service';
 
 
 @Controller("user")
 export class UserController {
-    constructor(private readonly userService: UserService) {
+    constructor(private readonly userService: UserService, private readonly authService: AuthService) {
     }
 
     @Post("register")
@@ -19,7 +20,7 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Post("login")
     async login(@Body() userData: { email: string, password: string }) {
-        return this.userService.user({ email: userData.email, password: userData.password });
+        return this.authService.signIn(userData.email, userData.password)
     }
 
 }

@@ -8,15 +8,12 @@ import { EncryptionService } from 'src/encription.service';
 export class UserService {
     constructor(private prisma: PrismaService, private encriptionService: EncryptionService) { }
 
-    async user(
-        params: { email: string, password: string }
+    async findByEmail(
+        params: { email: string }
     ): Promise<User | null> {
-        let found = await this.prisma.user.findUnique({
+        return await this.prisma.user.findUnique({
             where: { email: params.email }
         });
-        if (found && await this.encriptionService.comparePasswords(params.password, found.password)) {
-            return found;
-        } else { throw new UnauthorizedException }
     }
 
     async users(params: {

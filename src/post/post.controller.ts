@@ -1,7 +1,9 @@
-import { Controller, Param, Get, Delete, Put, Body, Post } from '@nestjs/common';
+import { Controller, Param, Get, Delete, Put, Body, Post, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Post as PostModel, } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('post')
 export class PostController {
     constructor(
