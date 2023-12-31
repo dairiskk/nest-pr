@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { Comment } from '@prisma/client';
+import { Comment, User } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { CreateCommentDto } from './dtos';
 
 @UseGuards(AuthGuard)
 @Controller('comment')
@@ -17,12 +18,12 @@ export class CommentController {
     }
 
     @Post()
-    async createComment(@Body() commentData: Comment): Promise<Comment> {
+    async createComment(@Body() commentData: CreateCommentDto): Promise<Comment> {
         return this.commentService.create(commentData);
     }
 
     @Get(':id')
-    async getCommentById(@Param('id') id: string): Promise<Comment> {
+    async getCommentById(@Param('id') id: string, @Req() req: Request): Promise<Comment> {
         return this.commentService.findById({ id: Number(id) });
     }
     @Get('user/:id')
@@ -30,3 +31,4 @@ export class CommentController {
         return this.commentService.comments({ where: { authorId: Number(id) } });
     }
 }
+

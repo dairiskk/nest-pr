@@ -2,6 +2,7 @@ import { Controller, Param, Get, Delete, Put, Body, Post, UseGuards } from '@nes
 import { PostService } from './post.service';
 import { Post as PostModel, } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { CreatePostDto } from './dtos';
 
 @UseGuards(AuthGuard)
 @Controller('post')
@@ -47,7 +48,7 @@ export class PostController {
 
     @Post()
     async createDraft(
-        @Body() postData: { title: string; content?: string; authorId: number },
+        @Body() postData: CreatePostDto,
     ): Promise<PostModel> {
         const { title, content, authorId } = postData;
         return this.postService.createPost({
