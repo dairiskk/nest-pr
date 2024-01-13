@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+
+  // Sort imports and automatically remove
+  // unused imports when pressing CTRL + S
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}
